@@ -4,5 +4,6 @@
 int add(int id);
 int del(int n);
 int get(int n);
+void print();
 
 #endif

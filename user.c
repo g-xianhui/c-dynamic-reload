@@ -3,21 +3,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_USER    10
+
 static int *user_list = NULL;
 static int i = 0;
 
 int add(int id) {
-    user_list[i % 100] = id;
+    user_list[i++ % MAX_USER] = id;
     return id;
 }
 
 int del(int n) {
-    user_list[n % 100] = 0;
+    user_list[n % MAX_USER] = 0;
     return n;
 }
 
 int get(int n) {
-    return user_list[n % 100];
+    return user_list[n % MAX_USER];
+}
+
+void print() {
+    int i;
+    for (i = 0; i < MAX_USER; i++)
+        printf("%d ", user_list[i]);
+    printf("\n");
 }
 
 void __attribute__((constructor)) init_user(void) {
@@ -26,7 +35,7 @@ void __attribute__((constructor)) init_user(void) {
     if (old_list)
         user_list = old_list;
     else
-        user_list = malloc(sizeof(int) * 100);
+        user_list = malloc(sizeof(int) * MAX_USER);
 }
 
 void __attribute__((destructor)) fini_user(void) {

@@ -3,9 +3,10 @@ all : main libcache.so libuser.so
 CC = gcc
 CFLAGS = -g -Wall
 
-main : main.o libcache.so
-	$(CC) -o $@ $< -L. -ldl -lcache
-main.o : main.c
+main : main.o signal.o libcache.so
+	$(CC) -o $@ main.o signal.o -L. -ldl -lcache
+main.o : main.c signal.h cache.h
+signal.o : signal.c
 
 libcache.so : cache.o table.o
 	$(CC) -shared -o $@ $^
