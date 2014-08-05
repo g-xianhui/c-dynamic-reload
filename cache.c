@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 static Table_T key_addrs = NULL;
 
@@ -33,4 +34,22 @@ void cache_set_value_addr(const char *key, void *addr) {
 void* cache_get_value_addr(const char *key) {
     printf("get_value_addr[%s]\n", key);
     return Table_get(key_addrs, key);
+}
+
+void cache_set_copy(const char *key, void *addr, int size) {
+    printf("cache_set_copy[%s]\n", key);
+    assert(size > 0);
+    void *copy = malloc(size);
+    memcpy(copy, addr, size);
+    Table_put(key_addrs, key, copy);
+}
+
+void cache_get_copy(const char *key, void *buf, int size) {
+    printf("cache_get_copy[%s]\n", key);
+    assert(size > 0);
+    void *addr = Table_get(key_addrs, key);
+    if (!addr)
+        return;
+    memcpy(buf, addr, size);
+    free(addr);
 }

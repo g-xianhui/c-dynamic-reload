@@ -31,14 +31,16 @@ void print() {
 
 void __attribute__((constructor)) init_user(void) {
     printf("init_user\n");
-    int *old_list = cache_get_value_addr("user");
+    int *old_list = cache_get_value_addr("user_list");
     if (old_list)
         user_list = old_list;
     else
         user_list = malloc(sizeof(int) * MAX_USER);
+    cache_get_copy("user_index", &i, sizeof(i));
 }
 
 void __attribute__((destructor)) fini_user(void) {
     printf("fnit_user\n");
-    cache_set_value_addr("user", user_list);
+    cache_set_value_addr("user_list", user_list);
+    cache_set_copy("user_index", &i, sizeof(i));
 }
